@@ -1,0 +1,50 @@
+.AdminPage{
+  padding: 20px 40px;
+}
+.P-title,.P-search{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.P-title h2{
+  font-size: 25px;
+  font-weight: bold;
+}
+.P-title p{
+  font-size: 16px;
+  font-weight: bold;
+  padding-right: 5px;
+}
+.P-search .all{
+  background-color: white;
+  padding: 5px 10px;
+  text-align: center;
+  border-radius:5px ;
+  font-weight: bold;
+  cursor: pointer;
+}
+.P-search input{
+  width: 230px;
+}
+.addnew-P{
+  margin-top: 10px;
+}
+.U-operations{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+}
+table i{
+  cursor: pointer;
+  color: red;
+  font-size: 20px;
+}
+.up{
+  color: green;
+}
+.P-pagination{
+  width: 30%;
+  margin: auto;
+}
