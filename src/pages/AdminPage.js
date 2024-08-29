@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../styles/AdminPage.css";
 import Table from '@mui/material/Table';
 import Pagination from '@mui/material/Pagination';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function AdminPage() {
   const[name,setname]=useState("");
   const[email,setemail]=useState("");
@@ -38,9 +40,15 @@ function AdminPage() {
       const data = await response.json();
       console.log(data);
       if (response.ok) {
+        toast.success("User Created Successfully", {
+          position: "top-center", // استخدم قيمة مباشرة لموقع الرسالة
+        });
         console.log("User Created successfully") 
       } else {
        console.log(data.error_Message[0].message);
+       toast.error(data.error_Message[0].message, {
+        position: "top-center", // استخدم قيمة مباشرة لموقع الرسالة
+      });
       }
     } catch (error) {
       console.error("Training creation failed", error);
@@ -266,6 +274,7 @@ function AdminPage() {
         </div>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }
