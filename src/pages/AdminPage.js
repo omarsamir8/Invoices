@@ -17,6 +17,7 @@ function AdminPage() {
   const[Users,setUsers]=useState([]);
   const[pagenumber,setpagenumber]=useState("1")
   const [selectedUser, setselectedUser] = useState(null);
+  const[searchvalue,setsearchvalue]=useState("")
   // Create User
   const accessToken=localStorage.getItem("accessToken");
   const refreshToken=localStorage.getItem("refreshToken");
@@ -66,7 +67,7 @@ function AdminPage() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://invoice-nine-iota.vercel.app/api/user/get/users?size=5&page=${pagenumber}&sort=name`,
+          `https://invoice-nine-iota.vercel.app/api/user/get/users?size=5&page=${pagenumber}&sort=name&serach=${searchvalue}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -82,7 +83,7 @@ function AdminPage() {
     };
 
     fetchData();
-  }, [accessToken, refreshToken,pagenumber]);
+  }, [accessToken, refreshToken,pagenumber,searchvalue]);
   console.log(Users)
 
   // Delete User
@@ -212,7 +213,7 @@ function AdminPage() {
                 <div className='all'>Manger</div>    
                 </div>
                 
-                <div style={{marginRight:"-10px"}}><input type="text" className="form-control"placeholder="Search By Name,Role or etc"/></div>
+                <div style={{marginRight:"-10px"}}><input onChange={(e)=>{setsearchvalue(e.target.value)}} type="text" className="form-control"placeholder="Search By Name,Role or etc"/></div>
         </div>
         <div className="addnew-P">
                             <button
