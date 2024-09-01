@@ -1,0 +1,7 @@
+.username{
+    background: linear-gradient(45deg, green, orange);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;  
+    font-size: 22px !important;
+    margin-top: 5px;
+}

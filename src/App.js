@@ -7,6 +7,7 @@ import { ToastContainer } from "react-bootstrap";
 import "react-toastify/dist/ReactToastify.css";
 import VerifyCode from "./pages/VerifyCode";
 import AdminPage from "./pages/AdminPage";
+import UserPage from "./pages/UserPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/adminpage" element={<AdminPage />} />
+          <Route path="/userpage" element={<UserPage />} />
           <Route path="/SendConfirmation" element={<SendConfirmation />} />
           <Route path="/VerifyCode" element={<VerifyCode />} />
         </Routes>

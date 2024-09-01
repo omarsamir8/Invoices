@@ -30,16 +30,12 @@
 .addnew-P{
   margin-top: 10px;
 }
-.U-operations{
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  text-align: center;
-}
+
 table i{
   cursor: pointer;
   color: red;
   font-size: 20px;
+  margin-left: 10px;
 }
 .up{
   color: green;

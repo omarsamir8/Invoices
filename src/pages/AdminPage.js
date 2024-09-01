@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/AdminPage.css";
 import Table from '@mui/material/Table';
 import Pagination from '@mui/material/Pagination';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 function AdminPage() {
   const[name,setname]=useState("");
   const[email,setemail]=useState("");
@@ -12,6 +13,8 @@ function AdminPage() {
   const[phone,setphone]=useState("");
   const[gender,setgender]=useState("");
   const[birthdate,setbirthdate]=useState("");
+  const[Users,setUsers]=useState([]);
+  const[pagenumber,setpagenumber]=useState("1")
   // Create User
   const accessToken=localStorage.getItem("accessToken");
   const refreshToken=localStorage.getItem("refreshToken");
@@ -54,6 +57,31 @@ function AdminPage() {
       console.error("Training creation failed", error);
     }
   };
+
+  // Get All Users
+  console.log(pagenumber)
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://invoice-nine-iota.vercel.app/api/user/get/users?size=5&page=${pagenumber}&sort=name`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "refresh-token": refreshToken,
+            },
+          }
+        );
+        setUsers(response.data.users)
+        
+      } catch (error) {
+        console.error("Error fetching admin info:", error);
+      }
+    };
+
+    fetchData();
+  }, [accessToken, refreshToken,pagenumber]);
+  console.log(Users)
   return (
     <>
       <div className="AdminPage">
@@ -171,106 +199,37 @@ function AdminPage() {
               <th className="doctorInfo" scope="col">
                 Stauts
               </th>
-              <th className="doctorInfo" scope="col">
+              <th  className="doctorInfo" scope="col">
                 Operations
               </th>
             </tr>
           </thead>
-          <tbody>    
-            <tr>
-                <th className="doctorInfo" scope="row">1</th>
-                <td className="doctorInfo">Omar Samir</td>
-                <td className="doctorInfo">Omarmokdad2022@gmail.com</td>
-                <td className="doctorInfo">01558849371</td>
-                <td className="doctorInfo">Manger</td>
+          <tbody> 
+            {Users.map((user,index)=>{
+              return (
+                 <tr key={index}>
+                <th className="doctorInfo" scope="row">{index+1}</th>
+                <td className="doctorInfo">{user.name}</td>
+                <td className="doctorInfo">{user.email}</td>
+                <td className="doctorInfo">{user.phone}</td>
+                <td className="doctorInfo">{user.role}</td>
                 <td className="doctorInfo">Active</td>
-                <td className='U-operations'><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
+                <td><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
             </tr>
-            <tr>
-                <th className="doctorInfo" scope="row">1</th>
-                <td className="doctorInfo">Omar Samir</td>
-                <td className="doctorInfo">Omarmokdad2022@gmail.com</td>
-                <td className="doctorInfo">01558849371</td>
-                <td className="doctorInfo">Manger</td>
-                <td className="doctorInfo">Active</td>
-                <td className='U-operations'><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
-            </tr>
-            <tr>
-                <th className="doctorInfo" scope="row">1</th>
-                <td className="doctorInfo">Omar Samir</td>
-                <td className="doctorInfo">Omarmokdad2022@gmail.com</td>
-                <td className="doctorInfo">01558849371</td>
-                <td className="doctorInfo">Manger</td>
-                <td className="doctorInfo">Active</td>
-                <td className='U-operations'><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
-            </tr>
-            <tr>
-                <th className="doctorInfo" scope="row">1</th>
-                <td className="doctorInfo">Omar Samir</td>
-                <td className="doctorInfo">Omarmokdad2022@gmail.com</td>
-                <td className="doctorInfo">01558849371</td>
-                <td className="doctorInfo">Manger</td>
-                <td className="doctorInfo">Active</td>
-                <td className='U-operations'><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
-            </tr>
-            <tr>
-                <th className="doctorInfo" scope="row">1</th>
-                <td className="doctorInfo">Omar Samir</td>
-                <td className="doctorInfo">Omarmokdad2022@gmail.com</td>
-                <td className="doctorInfo">01558849371</td>
-                <td className="doctorInfo">Manger</td>
-                <td className="doctorInfo">Active</td>
-                <td className='U-operations'><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
-            </tr>
-            <tr>
-                <th className="doctorInfo" scope="row">1</th>
-                <td className="doctorInfo">Omar Samir</td>
-                <td className="doctorInfo">Omarmokdad2022@gmail.com</td>
-                <td className="doctorInfo">01558849371</td>
-                <td className="doctorInfo">Manger</td>
-                <td className="doctorInfo">Active</td>
-                <td className='U-operations'><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
-            </tr>
-            <tr>
-                <th className="doctorInfo" scope="row">1</th>
-                <td className="doctorInfo">Omar Samir</td>
-                <td className="doctorInfo">Omarmokdad2022@gmail.com</td>
-                <td className="doctorInfo">01558849371</td>
-                <td className="doctorInfo">Manger</td>
-                <td className="doctorInfo">Active</td>
-                <td className='U-operations'><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
-            </tr>
-            <tr>
-                <th className="doctorInfo" scope="row">1</th>
-                <td className="doctorInfo">Omar Samir</td>
-                <td className="doctorInfo">Omarmokdad2022@gmail.com</td>
-                <td className="doctorInfo">01558849371</td>
-                <td className="doctorInfo">Manger</td>
-                <td className="doctorInfo">Active</td>
-                <td className='U-operations'><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
-            </tr>
-            <tr>
-                <th className="doctorInfo" scope="row">1</th>
-                <td className="doctorInfo">Omar Samir</td>
-                <td className="doctorInfo">Omarmokdad2022@gmail.com</td>
-                <td className="doctorInfo">01558849371</td>
-                <td className="doctorInfo">Manger</td>
-                <td className="doctorInfo">Active</td>
-                <td className='U-operations'><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
-            </tr>
-            <tr>
-                <th className="doctorInfo" scope="row">1</th>
-                <td className="doctorInfo">Omar Samir</td>
-                <td className="doctorInfo">Omarmokdad2022@gmail.com</td>
-                <td className="doctorInfo">01558849371</td>
-                <td className="doctorInfo">Manger</td>
-                <td className="doctorInfo">Active</td>
-                <td className='U-operations'><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
-            </tr>
+              )
+            })}   
           </tbody>
         </Table>
         <div className='P-pagination' >
-            <Pagination count={10} variant="outlined" color="secondary" />
+        <Pagination 
+          count={10} 
+          onChange={(e, value) => {
+            setpagenumber(value); // هنا نقوم بتحديث الحالة بناءً على الرقم المختار
+          }} 
+          variant="outlined" 
+          color="secondary" 
+        />
+        
         </div>
         </div>
       </div>

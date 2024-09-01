@@ -37,7 +37,12 @@ function Login() {
         toast.success("Login Successfully", {
           position: "top-center", // استخدم قيمة مباشرة لموقع الرسالة
         });
-        window.location.href = "/adminpage";
+        if(data.user.role==="admin"){
+          window.location.href = "/adminpage";   
+        }else if(data.user.role==="user"){
+          window.location.href="/userpage"
+        }
+        
       } else {
         const newErrors = {};
         if (data.validationErrors) {
