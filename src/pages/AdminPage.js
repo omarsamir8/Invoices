@@ -15,6 +15,7 @@ function AdminPage() {
   const[birthdate,setbirthdate]=useState("");
   const[Users,setUsers]=useState([]);
   const[pagenumber,setpagenumber]=useState("1")
+  const [selectedUser, setselectedUser] = useState(null);
   // Create User
   const accessToken=localStorage.getItem("accessToken");
   const refreshToken=localStorage.getItem("refreshToken");
@@ -82,6 +83,110 @@ function AdminPage() {
     fetchData();
   }, [accessToken, refreshToken,pagenumber]);
   console.log(Users)
+
+  // Delete User
+  const handleDelete = async (UserId) => {
+    try {
+          const response = await fetch(
+          `https://invoice-nine-iota.vercel.app/api/admin/delete/user?userId=${UserId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "refresh-token": refreshToken,
+            },
+          }
+        );
+        if (response.ok) {
+          setUsers((PrevUsers) =>
+            PrevUsers.filter((user) => user._id !== UserId)
+          );
+          console.log(`User with ID ${UserId} deleted successfully.`);
+          toast.success("User Deleted Successfully", {
+            position: "top-center", // استخدم قيمة مباشرة لموقع الرسالة
+          });
+        } else {
+          console.error(`Failed to delete user with ID ${UserId}.`);
+          toast.error("Failed To Delete User", {
+            position: "top-center", // استخدم قيمة مباشرة لموقع الرسالة
+          });
+        }
+      
+    } catch (error) {
+      console.error("Delete failed", error);
+    }
+  };
+
+  // open Model
+  function openUpdateModal(user) {
+    setselectedUser(user);
+    setname(user.name);
+    setphone(user.phone);
+    setemail(user.email);
+    setgender(user.gender);
+    setbirthdate(user.birthdate);
+  }
+console.log(name,email,phone,gender,birthdate,selectedUser._id);
+  // Update User
+  const updateUser = async () => {
+    try {
+      const response = await fetch(
+        `https://invoice-nine-iota.vercel.app/api/admin/update/user?userId=${selectedUser._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+            "refresh-token": refreshToken,
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            gender,
+            birthdate,
+          }),
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        toast.success("User Updated Successfully ", {
+          position: "top-center", // استخدم قيمة مباشرة لموقع الرسالة
+        });
+        // Update the state with the modified student
+        setUsers((PrevUsers) =>
+          PrevUsers.map((PrevUser) =>
+            PrevUser._id === selectedUser._id
+              ? {
+                  ...PrevUser,
+                  name,
+                  email,
+                  phone,
+                  gender,
+                  birthdate,
+                }
+              : PrevUser
+          )
+        );
+
+        // Clear the selected student and reset input fields
+        setselectedUser("");
+        setname("");
+        setemail("");
+        setphone("");
+        setbirthdate("");
+        setgender("");
+      } else {
+        toast.error(data.error_Message
+            ? data.error_Message[0].message
+            : data.message, {
+          position: "top-center", // استخدم قيمة مباشرة لموقع الرسالة
+        });
+        }
+    } catch (error) {
+      console.error("Update failed", error);
+    }
+  };
   return (
     <>
       <div className="AdminPage">
@@ -214,7 +319,78 @@ function AdminPage() {
                 <td className="doctorInfo">{user.phone}</td>
                 <td className="doctorInfo">{user.role}</td>
                 <td className="doctorInfo">Active</td>
-                <td><i class="fa-solid fa-trash-can"></i><i class="fa-solid fa-square-pen up"></i></td>
+                <td><i onClick={()=>{handleDelete(user._id)}} class="fa-solid fa-trash-can"></i>
+                    <div style={{display:"flex" ,alignItems:"center"}}>
+                        <button
+                                style={{ background: "white", border: "none", outline: "none",padding:"0",marginTop:"-25px",marginLeft:"30px" }}
+                                type="button"
+                                className="btn btn-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModal2"
+                            >
+                                <i onClick={()=>{openUpdateModal(user)}} class="fa-solid fa-square-pen up"></i>
+                        </button>
+                        {/* Model Build */}
+                        <div className="modal fade" id="exampleModal2" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div className="modal-dialog">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title" id="exampleModalLabel">Update User</h5>
+                                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div className="modal-body">
+                                            <form style={{ display: "flex", width: "100%", gap: "20px", padding: "0",flexWrap:"wrap", }}>
+                                                <input
+                                                    onChange={(e) => setname(e.target.value)}
+                                                    type="text"
+                                                    className="form-control"
+                                                    placeholder="Enter User Name"
+                                                    value={name}
+                                                    style={{width:"45%"}}
+                                                />
+                                                <input
+                                                    onChange={(e) => setemail(e.target.value)} // Set the selected file
+                                                    type="email"
+                                                    className="form-control"
+                                                    placeholder="Enter User Email "
+                                                    style={{width:"45%"}}
+                                                    value={email}
+                                                />
+                                                <input
+                                                    onChange={(e) => setphone(e.target.value)}
+                                                    type="text"
+                                                    className="form-control"
+                                                    placeholder="Enter User Phone"
+                                                    style={{width:"45%"}}
+                                                    value={phone}
+                                                />
+                                                <input
+                                                    onChange={(e) => setgender(e.target.value)} // Set the selected file
+                                                    type="text"
+                                                    className="form-control"
+                                                    placeholder="Enter User Gender "
+                                                    style={{width:"45%"}}
+                                                    value={gender}
+                                                />
+                                                <input
+                                                    onChange={(e) => setbirthdate(e.target.value)} // Set the selected file
+                                                    type="date"
+                                                    className="form-control"
+                                                    placeholder="Enter User Gender "
+                                                    style={{width:"45%"}}
+                                                    value={birthdate}
+                                                />
+                                            </form>
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button onClick={()=>{updateUser()}}  type="button" className="btn btn-primary">Update User</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </td>
             </tr>
               )
             })}   
