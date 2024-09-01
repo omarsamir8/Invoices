@@ -3,6 +3,7 @@ import "../styles/Login.css";
 import { Button, Form } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -10,7 +11,7 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [mainerror, setmainerror] = useState("");
   const [isclicked, setisclicked] = useState(true);
-
+  const navigate = useNavigate();
   const Login = async () => {
     try {
       setisclicked(!isclicked);
@@ -38,9 +39,9 @@ function Login() {
           position: "top-center", // استخدم قيمة مباشرة لموقع الرسالة
         });
         if(data.user.role==="admin"){
-          window.location.href = "/adminpage";   
+          navigate("/adminpage");
         }else if(data.user.role==="user"){
-          window.location.href="/userpage"
+          navigate("/userpage");
         }
         
       } else {

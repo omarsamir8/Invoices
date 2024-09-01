@@ -4,6 +4,7 @@ import Table from '@mui/material/Table';
 import Pagination from '@mui/material/Pagination';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
 import axios from "axios";
 function AdminPage() {
   const[name,setname]=useState("");
@@ -87,6 +88,15 @@ function AdminPage() {
   // Delete User
   const handleDelete = async (UserId) => {
     try {
+      const confirmed = await Swal.fire({
+        title: "Are you sure?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      });
+      if (confirmed.isConfirmed) {
           const response = await fetch(
           `https://invoice-nine-iota.vercel.app/api/admin/delete/user?userId=${UserId}`,
           {
@@ -111,7 +121,7 @@ function AdminPage() {
             position: "top-center", // استخدم قيمة مباشرة لموقع الرسالة
           });
         }
-      
+      }
     } catch (error) {
       console.error("Delete failed", error);
     }
@@ -126,14 +136,14 @@ function AdminPage() {
     setgender(user.gender);
     setbirthdate(user.birthdate);
   }
-console.log(name,email,phone,gender,birthdate,selectedUser._id);
+// console.log(name,email,phone,gender,birthdate,select);
   // Update User
   const updateUser = async () => {
     try {
       const response = await fetch(
         `https://invoice-nine-iota.vercel.app/api/admin/update/user?userId=${selectedUser._id}`,
         {
-          method: "PUT",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${accessToken}`,
