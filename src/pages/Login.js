@@ -31,6 +31,9 @@ function Login() {
 
       const data = await response.json();
       console.log(data);
+      if(data.message==="You are trying to log in from a new device"){
+        navigate("/SendConfirmation");
+      }
       localStorage.setItem('accessToken',data.tokens.accessToken)
       localStorage.setItem('refreshToken',data.tokens.refreshToken)
       setmainerror(data.message);
@@ -62,12 +65,14 @@ function Login() {
     }
   };
   
-  const openfromnewdevice = () => {
-    if (mainerror === "You are trying to log in from a new device") {
-      window.location.href = "/SendConfirmation";
-    }
-  };
-  useEffect(()=>{openfromnewdevice()},[mainerror])
+  // const openfromnewdevice = () => {
+  //   if (mainerror === "You are trying to log in from a new device") {
+  //     // navigate("/SendConfirmation");
+  //     window.location.href = "/SendConfirmation";
+  //   }
+  // };
+  // console.log(mainerror)
+  // useEffect(()=>{openfromnewdevice()},[mainerror])
   return (
     <>
       <div className="login">
