@@ -67,7 +67,7 @@ function AdminPage() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `https://invoice-nine-iota.vercel.app/api/user/get/users?size=5&page=${pagenumber}&sort=name&serach=${searchvalue}`,
+          `https://invoice-nine-iota.vercel.app/api/user/get/users?size=5&page=${pagenumber}&sort=name&search=${searchvalue}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
